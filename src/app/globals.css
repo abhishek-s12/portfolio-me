@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS
+   Background: near-black, slightly blue undertone (not pure #000)
+   Accent: signal teal — reads as "trace / diff / detected overlap",
+   grounded in the product's own domain (diagnostics, not decoration)
+   ============================================================ */
+
+@theme {
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui;
+  --font-body: "Inter Variable", ui-sans-serif, system-ui;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  --color-bg: #0a0b0d;
+  --color-bg-raised: #131519;
+  --color-bg-overlay: #17191e;
+  --color-border: #22262c;
+  --color-border-strong: #2e333b;
+
+  --color-ink: #edeef0;
+  --color-ink-dim: #9aa0a8;
+  --color-ink-faint: #5c636c;
+
+  --color-signal: #2de8b8;
+  --color-signal-dim: #1ea886;
+  --color-signal-ink: #05130f;
+
+  --color-warn: #e8b12d;
+  --color-danger: #e85c5c;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+  --color-bg: #fafaf9;
+  --color-bg-raised: #f2f1ee;
+  --color-bg-overlay: #ffffff;
+  --color-border: #e4e3df;
+  --color-border-strong: #d2d0ca;
+  --color-ink: #16181b;
+  --color-ink-dim: #565c63;
+  --color-ink-faint: #8a8f96;
+  --color-signal: #0d8f6f;
+  --color-signal-dim: #0b7a5f;
+  --color-signal-ink: #ffffff;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-signal-ink);
+}
+
+/* Visible, deliberate focus ring — never suppressed */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.mono-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.grid-signature {
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, black 40%, transparent 90%);
+}
+
+.text-balance {
+  text-wrap: balance;
+}

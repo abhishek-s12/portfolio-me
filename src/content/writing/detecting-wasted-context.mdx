@@ -1,0 +1,30 @@
+---
+title: "Why AST overlap alone can't detect wasted context"
+excerpt: "A single detection signal produces too many false positives. Here's why AgentXray scores every file with two independent methods instead of one."
+date: "2026-06-01"
+tags: ["AI agents", "Developer tools", "AgentXray"]
+---
+
+Most agent-observability tools tell you *how much* context an agent read. Almost none tell you *how much of it mattered*.
+
+## The naive approach
+
+The first version of AgentXray's scoring engine only checked one thing: did any symbol from a file the agent read — a function name, a class, a constant — show up in the agent's final diff? If not, flag the file as wasted context.
+
+This works surprisingly often. It also fails in a specific, predictable way.
+
+## Where symbol overlap breaks down
+
+Some files genuinely inform a decision without ever being quoted. A config file that changes which code path an agent chooses. A test file that confirms an assumption without being edited. Under pure symbol-overlap scoring, all of these look identical to a file the agent never should have opened.
+
+That's a false positive — and false positives are worse than false negatives here, because they teach a developer to distrust the tool.
+
+## Adding a second, independent signal
+
+Embedding similarity between a file's content and the agent's final output catches a different slice of "actually used" files — the ones that shaped the output's *meaning* without being reflected in its literal symbols.
+
+AgentXray now scores every file with both signals and only reports high-confidence waste when they agree. Where the two signals disagree, the file gets a lower confidence score instead of a hard flag — an honest "we're not sure" rather than a wrong answer stated with false certainty.
+
+## What's next
+
+The roadmap item I'm most interested in: session replay, so a wasted-context flag can be traced back to the exact tool call that caused it — not just the file it touched.
